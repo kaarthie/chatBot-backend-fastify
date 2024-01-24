@@ -1,0 +1,3 @@
+const RAZORPAYID="rzp_test_lxRT5NF1Dopxfd"
+const RAZORPAYSECRET="sEGonS41awMadqWt68JeOl4O"
+export {RAZORPAYID,RAZORPAYSECRET};

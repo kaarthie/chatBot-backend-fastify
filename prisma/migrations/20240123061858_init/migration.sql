@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `PendingBooking` ADD COLUMN `pets` INTEGER NULL;
+
+-- AlterTable
+ALTER TABLE `Room` ADD COLUMN `pet` INTEGER NOT NULL DEFAULT 0;

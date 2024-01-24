@@ -1,0 +1,32 @@
+{
+  "name": "chatbot",
+  "version": "1.0.0",
+  "description": "chatbot application for radison blu",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prisma": "^5.8.0"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.3.1",
+    "@fastify/cors": "^8.5.0",
+    "@fastify/passport": "^2.4.0",
+    "@fastify/secure-session": "^7.1.0",
+    "@prisma/client": "^5.8.0",
+    "crypto": "^1.0.1",
+    "date-fns": "^3.2.0",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.25.2",
+    "nodemailer": "^6.9.8",
+    "nodemon": "^3.0.2",
+    "passport-google-oauth20": "^2.0.0",
+    "razorpay": "^2.9.2",
+    "uuid": "^9.0.1"
+  }
+}

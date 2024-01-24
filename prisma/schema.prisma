@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId                String                  @id @default(uuid())
+  email                 String                  @unique
+  name                  String?
+  photo                 String?
+  created_at            DateTime                @default(now())
+  updated_at            DateTime                @updatedAt
+  bookingHistory        BookingHistory[]
+  chatHistoryCollection ChatHistoryCollection[]
+}
+
+model HotelCollection {
+  hotelId        String           @id @default(uuid())
+  branchName     String           @unique
+  locationId     String
+  location       Location         @relation(fields: [locationId], references: [locationId])
+  amenities      HotelAmenities[]
+  availableRooms AvailableRooms[]
+  bookingHistory BookingHistory[]
+}
+
+model Amenity {
+  amenityId      String           @id @default(uuid())
+  amenity        String
+  hotelAmenities HotelAmenities[]
+  roomAmenities  RoomAmenities[]
+}
+
+model HotelAmenities {
+  id        Int             @id @default(autoincrement())
+  hotelId   String
+  amenityId String
+  hotel     HotelCollection @relation(fields: [hotelId], references: [hotelId])
+  amenity   Amenity         @relation(fields: [amenityId], references: [amenityId])
+}
+
+model RoomAmenities {
+  id        Int     @id @default(autoincrement())
+  roomId    String
+  amenityId String
+  room      Room    @relation(fields: [roomId], references: [roomId])
+  amenity   Amenity @relation(fields: [amenityId], references: [amenityId])
+}
+
+model AvailableRooms {
+  id      Int             @id @default(autoincrement())
+  hotelId String
+  roomId  String
+  count   Int
+  hotel   HotelCollection @relation(fields: [hotelId], references: [hotelId])
+  room    Room            @relation(fields: [roomId], references: [roomId])
+}
+
+model Location {
+  locationId   String            @id @default(uuid())
+  locationName String
+  hotels       HotelCollection[]
+}
+
+model Room {
+  roomId         String           @id @default(uuid())
+  type           String
+  cost           Float
+  adult          Int
+  child          Int
+  pet            Int              @default(0)
+  size           Int
+  bedType        String
+  RoomAmenities  RoomAmenities[]
+  availableRooms AvailableRooms[]
+  bookingHistory BookingHistory[]
+}
+
+model BookingHistory {
+  bookingId     String          @id @default(uuid())
+  userId        String
+  hotelId       String
+  roomId        String
+  adult         Int
+  child         Int
+  paymentStatus Boolean
+  checkIn       DateTime
+  checkOut      DateTime
+  user          User            @relation(fields: [userId], references: [userId])
+  hotel         HotelCollection @relation(fields: [hotelId], references: [hotelId])
+  room          Room            @relation(fields: [roomId], references: [roomId])
+}
+
+model ChatHistoryCollection {
+  chatId                String                  @id 
+  userId                String
+  user                  User                    @relation(fields: [userId], references: [userId])
+  date                  DateTime                @default(now())
+  individualChatHistory IndividualChatHistory[]
+  pendingBooking        PendingBooking[]
+}
+
+model IndividualChatHistory {
+  id             String                @id @default(uuid())
+  chatId         String
+  type           String
+  message        String
+  time           DateTime              @default(now())
+  chatCollection ChatHistoryCollection @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
+}
+
+model PendingBooking {
+  id             Int                    @id @default(autoincrement())
+  roomTypes      String?
+  roomAmenities  String?
+  hotelAmenities String?
+  adults         Int?
+  children       Int?
+  pets           Int?
+  location       String?
+  date           DateTime?
+  price          Int?
+  duration       Int?
+  count          Int?
+  chatId         String                 @unique
+  chat           ChatHistoryCollection? @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
+}
